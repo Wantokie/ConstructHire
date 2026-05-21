@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ConstructHire Admin Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Public+Sans:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#001736",
+            "primary-container": "#002b5c",
+            "secondary": "#b52619",
+            "accent": "#fcc011",
+            "surface": "#f8fafc",
+            "outline": "#64748b"
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Public Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .nav-item.active { background: #b52619; color: white; box-shadow: 0 4px 12px rgba(181, 38, 25, 0.2); }
+    .glass-effect { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+
+    /* Toast notification */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      z-index: 9999; min-width: 280px;
+      transform: translateY(120%); opacity: 0;
+      transition: all 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body class="bg-[#f1f5f9] min-h-screen font-sans text-primary">
+
+  <!-- Toast -->
+  <div id="toast" class="rounded-2xl shadow-2xl px-6 py-4 flex items-center gap-3">
+    <i id="toastIcon" class="fas fa-check-circle text-xl"></i>
+    <span id="toastMsg" class="font-semibold text-sm"></span>
+  </div>
+
+  <div class="flex h-screen overflow-hidden">
+    <aside class="w-72 bg-primary text-white flex flex-col shadow-2xl z-20">
+      <div class="p-8">
+        <div class="flex items-center gap-3 mb-10">
+          <div class="bg-secondary p-2 rounded-lg"><i class="fas fa-hard-hat text-xl"></i></div>
+          <span class="text-2xl font-black tracking-tighter font-display uppercase">ConstructHire</span>
+        </div>
+        
+        <nav class="space-y-2">
+          <button data-tab="applications" class="nav-item active w-full flex items-center gap-4 px-5 py-4 rounded-xl transition-all font-bold">
+            <i class="fas fa-clipboard-list w-5"></i> Applications
+            <span id="pendingCountDisplay" class="ml-auto bg-white/20 px-2 py-0.5 rounded text-[10px]">0</span>
+          </button>
+          <button data-tab="postings" class="nav-item w-full flex items-center gap-4 px-5 py-4 rounded-xl transition-all font-bold">
+            <i class="fas fa-plus-circle w-5"></i> Job Postings
+          </button>
+          <a href="/logout" class="w-full flex items-center gap-4 px-5 py-4 rounded-xl transition-all font-bold text-outline hover:text-white mt-20">
+            <i class="fas fa-sign-out-alt w-5"></i> Logout
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto bg-surface relative">
+      
+      <section id="applications" class="dashboard-panel p-10">
+        <header class="mb-10 flex justify-between items-end flex-wrap gap-6">
+          <div>
+            <h1 class="text-4xl font-black font-display text-primary uppercase tracking-tight">Recruitment Dashboard</h1>
+            <p class="text-outline font-medium">Review, approve, hire, and manage job applications.</p>
+          </div>
+          <div class="flex gap-4 flex-wrap items-start">
+            <!-- Stat Cards -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 min-w-[120px]">
+              <div class="text-[10px] uppercase font-bold text-outline mb-1">Pending</div>
+              <div id="statPending" class="text-2xl font-black text-secondary">0</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 min-w-[120px]">
+              <div class="text-[10px] uppercase font-bold text-outline mb-1">Approved</div>
+              <div id="statCompleted" class="text-2xl font-black text-green-600">0</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 min-w-[120px]">
+              <div class="text-[10px] uppercase font-bold text-outline mb-1">Hired</div>
+              <div id="statHired" class="text-2xl font-black text-blue-600">0</div>
+            </div>
+            <!-- Export Button -->
+            <button onclick="exportToExcel()"
+              class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-black px-5 py-4 rounded-2xl transition-all shadow-sm text-sm uppercase tracking-widest self-stretch">
+              <i class="fas fa-file-excel text-lg"></i> Export Excel
+            </button>
+          </div>
+        </header>
+
+        <div class="mb-8 flex flex-wrap gap-4 items-center glass-effect p-6 rounded-2xl border border-white shadow-sm">
+          <div class="relative flex-1 min-w-[300px]">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-outline"></i>
+            <input type="text" id="searchInput" placeholder="Search applicant names or email..."
+                   class="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-secondary/20 transition-all">
+          </div>
+          <select id="statusFilter" class="bg-gray-50 border-none rounded-xl py-3 px-6 font-bold text-sm focus:ring-2 focus:ring-secondary/20 cursor-pointer">
+            <option value="All">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Approved</option>
+            <option value="Hired">Hired</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-primary text-white uppercase text-[10px] font-black tracking-widest">
+                <th class="px-8 py-5">Applicant Details</th>
+                <th class="px-6 py-5">Applied For</th>
+                <th class="px-6 py-5">Experience</th>
+                <th class="px-6 py-5">Status / Actions</th>
+                <th class="px-8 py-5 text-right">Documents</th>
+              </tr>
+            </thead>
+            <tbody id="requestsTableBody" class="divide-y divide-gray-50 text-sm"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="postings" class="dashboard-panel p-10 hidden">
+        <h2 class="text-3xl font-black font-display text-primary mb-8 uppercase italic">Manage Job Openings</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <form id="adminPostJobForm" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-5">
+              <h3 class="font-bold text-lg mb-2">Post New Job</h3>
+              <input type="text" id="adminJobTitle" placeholder="Job Title (e.g. ENGINEER)" class="w-full rounded-xl border-gray-200 py-3" required>
+              <select id="adminJobType" class="w-full rounded-xl border-gray-200 py-3" required>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+              </select>
+              <input type="text" id="adminJobLocation" placeholder="Location" class="w-full rounded-xl border-gray-200 py-3" required>
+              <input type="text" id="adminJobPay" placeholder="Salary Range" class="w-full rounded-xl border-gray-200 py-3" required>
+              <textarea id="adminJobDesc" placeholder="Brief Job Description" class="w-full rounded-xl border-gray-200 py-3" rows="4"></textarea>
+              <button type="submit" class="w-full bg-secondary text-white font-black py-4 rounded-xl hover:bg-secondary/90 transition-all uppercase tracking-widest text-xs">
+                Publish Job
+              </button>
+            </form>
+          </div>
+          <div class="lg:col-span-2">
+            <div id="adminJobList" class="space-y-4"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Edit Job Modal -->
+      <div id="editJobModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-6" style="display:none;">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-8 space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-black text-primary uppercase tracking-tight">Edit Job Posting</h3>
+            <button onclick="closeEditModal()" class="text-outline hover:text-secondary transition text-2xl font-bold leading-none">&times;</button>
+          </div>
+          <input type="hidden" id="editJobId">
+          <input type="text" id="editJobTitle" placeholder="Job Title" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
+          <select id="editJobType" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Contract">Contract</option>
+          </select>
+          <input type="text" id="editJobLocation" placeholder="Location" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
+          <input type="text" id="editJobPay" placeholder="Salary Range" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
+          <textarea id="editJobDesc" placeholder="Job Description" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30" rows="3"></textarea>
+          <div class="flex gap-3 pt-2">
+            <button onclick="saveEditJob()" class="flex-1 bg-primary text-white font-black py-3 rounded-xl hover:bg-primary/90 transition uppercase tracking-widest text-xs">Save Changes</button>
+            <button onclick="closeEditModal()" class="flex-1 bg-gray-100 text-primary font-bold py-3 rounded-xl hover:bg-gray-200 transition text-xs uppercase tracking-widest">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+// ---- TOAST ----
+function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    const icon  = document.getElementById('toastIcon');
+    const text  = document.getElementById('toastMsg');
+
+    const styles = {
+        success: { bg: 'bg-green-600 text-white', icon: 'fa-check-circle' },
+        error:   { bg: 'bg-red-600 text-white',   icon: 'fa-times-circle' },
+        info:    { bg: 'bg-blue-600 text-white',   icon: 'fa-info-circle'  },
+    };
+    const s = styles[type] || styles.success;
+    toast.className = `rounded-2xl shadow-2xl px-6 py-4 flex items-center gap-3 ${s.bg}`;
+    icon.className  = `fas ${s.icon} text-xl`;
+    text.textContent = msg;
+
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ---- TAB SWITCHING ----
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById(btn.dataset.tab).classList.remove('hidden');
+    });
+  });
+
+  loadApplications();
+  loadJobs();
+});
+
+// ---- APPLICATIONS ----
+let allApps = [];
+
+async function loadApplications() {
+    try {
+        const res = await fetch('/api/applications');
+        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        allApps = Array.isArray(data) ? data : [];
+    } catch (err) {
+        console.error('loadApplications failed:', err);
+        allApps = [];
+    }
+    renderApplications(allApps);
+}
+
+function renderApplications(apps) {
+    const pending   = apps.filter(a => a.status === 'Pending').length;
+    const completed = apps.filter(a => a.status === 'Completed').length;
+    const hired     = apps.filter(a => a.status === 'Hired').length;
+
+    document.getElementById('statPending').textContent   = pending;
+    document.getElementById('statCompleted').textContent = completed;
+    document.getElementById('statHired').textContent     = hired;
+    document.getElementById('pendingCountDisplay').textContent = pending;
+
+    const tbody = document.getElementById("requestsTableBody");
+    if (apps.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-outline">No applications found.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = apps.map(app => {
+        const statusColor =
+            app.status === 'Completed' ? 'text-green-700 bg-green-50 border border-green-200' :
+            app.status === 'Hired'     ? 'text-blue-700 bg-blue-50 border border-blue-200'    :
+            app.status === 'Rejected'  ? 'text-red-600 bg-red-50 border border-red-100'       :
+                                         'text-yellow-700 bg-yellow-50 border border-yellow-200';
+
+        const statusLabel =
+            app.status === 'Completed' ? '✓ Approved' :
+            app.status === 'Hired'     ? '★ Hired'    :
+            app.status;
+
+        const isPending   = app.status === 'Pending';
+        const isCompleted = app.status === 'Completed';
+
+        const resumeBtn = app.resume
+            ? `<a href="/static/uploads/${app.resume}" target="_blank" class="text-xs font-bold text-secondary underline hover:opacity-70"><i class="fas fa-file-pdf mr-1"></i>View File</a>`
+            : `<span class="text-xs text-outline">None</span>`;
+
+        const hiredAtBadge = app.hired_at
+            ? `<div class="text-[10px] text-blue-500 mt-1"><i class="fas fa-calendar-check mr-1"></i>Hired ${app.hired_at}</div>`
+            : '';
+
+        return `
+        <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-8 py-5">
+                <div class="font-bold text-primary">${app.applicant_name}</div>
+                <div class="text-xs text-outline">${app.applicant_email}</div>
+                ${app.contact ? `<div class="text-xs text-outline mt-0.5"><i class="fas fa-phone mr-1"></i>${app.contact}</div>` : ''}
+            </td>
+            <td class="px-6 py-5 font-medium">${app.job_title}</td>
+            <td class="px-6 py-5 text-outline text-xs">${app.experience || '—'} yrs</td>
+            <td class="px-6 py-5">
+                <span class="px-3 py-1 rounded-full text-xs font-bold ${statusColor}">${statusLabel}</span>
+                ${hiredAtBadge}
+                ${isPending ? `
+                <div class="flex gap-2 mt-2">
+                    <button onclick="approveApp(${app.id})"
+                        class="text-xs bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 font-bold transition flex items-center gap-1">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button onclick="rejectApp(${app.id})"
+                        class="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 font-bold transition flex items-center gap-1">
+                        <i class="fas fa-times"></i> Reject
+                    </button>
+                </div>` : ''}
+                ${isCompleted ? `
+                <div class="mt-2">
+                    <button onclick="hireApp(${app.id}, '${app.applicant_name.replace(/'/g,"\\\'")}')"
+                        class="text-xs bg-blue-600 text-white px-4 py-1.5 rounded-lg hover:bg-blue-700 font-bold transition flex items-center gap-1.5">
+                        <i class="fas fa-user-check"></i> Hire Now
+                    </button>
+                </div>` : ''}
+            </td>
+            <td class="px-8 py-5 text-right">${resumeBtn}</td>
+        </tr>`;
+    }).join('');
+}
+
+async function approveApp(id) {
+    if (!confirm('Approve this application? An email will be sent to the applicant.')) return;
+    const res = await fetch(`/api/applications/approve/${id}`, { method: 'POST' });
+    if (res.ok) {
+        showToast('Application approved! Email sent to applicant.', 'success');
+        loadApplications();
+    } else {
+        showToast('Failed to approve application.', 'error');
+    }
+}
+
+async function hireApp(id, name) {
+    if (!confirm(`Officially hire ${name}? A hiring confirmation email will be sent.`)) return;
+    const res = await fetch(`/api/applications/hire/${id}`, { method: 'POST' });
+    if (res.ok) {
+        showToast(`${name} has been hired! Congratulations email sent. 🎉`, 'info');
+        loadApplications();
+    } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || 'Failed to complete hiring.', 'error');
+    }
+}
+
+async function rejectApp(id) {
+    if (!confirm('Reject this application?')) return;
+    const res = await fetch(`/api/applications/reject/${id}`, { method: 'POST' });
+    if (res.ok) {
+        showToast('Application rejected.', 'error');
+        loadApplications();
+    }
+}
+
+// ---- EXPORT ----
+function exportToExcel() {
+    const approved = allApps.filter(a => a.status === 'Completed' || a.status === 'Hired');
+    if (approved.length === 0) {
+        showToast('No approved or hired applicants to export.', 'error');
+        return;
+    }
+    showToast(`Exporting ${approved.length} record(s) to Excel…`, 'info');
+    window.location.href = '/api/applications/export';
+}
+
+// ---- SEARCH & FILTER ----
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('statusFilter').addEventListener('change', applyFilters);
+
+function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+
+    // Map dropdown "Completed" label back to API value
+    const statusMap = { 'All': 'All', 'Pending': 'Pending', 'Completed': 'Completed', 'Hired': 'Hired', 'Rejected': 'Rejected' };
+    const filterStatus = statusMap[status] || 'All';
+
+    const filtered = allApps.filter(a => {
+        const matchName   = a.applicant_name.toLowerCase().includes(search) || a.applicant_email.toLowerCase().includes(search);
+        const matchStatus = filterStatus === 'All' || a.status === filterStatus;
+        return matchName && matchStatus;
+    });
+    renderApplications(filtered);
+}
+
+// ---- JOB POSTINGS ----
+function escapeAttr(str) {
+    return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+async function loadJobs() {
+    const res = await fetch('/api/jobs');
+    const jobs = await res.json();
+    const list = document.getElementById('adminJobList');
+    if (jobs.length === 0) {
+        list.innerHTML = '<p class="text-outline text-sm">No jobs posted yet.</p>';
+        return;
+    }
+    list.innerHTML = jobs.map(j => {
+        const isFilled = j.job_type === 'Filled';
+        const typeBadge = isFilled
+            ? `<span class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold"><i class="fas fa-check-circle"></i> Position Filled</span>`
+            : `<span class="bg-gray-100 px-2 py-0.5 rounded text-xs">${j.job_type || 'Full-time'}</span>`;
+        return `
+        <div class="bg-white rounded-2xl p-6 border ${isFilled ? 'border-green-200 bg-green-50/30' : 'border-gray-100'} shadow-sm">
+            <div class="flex justify-between items-start gap-4">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                        <h4 class="font-black text-primary text-lg uppercase ${isFilled ? 'opacity-50 line-through' : ''}">${j.title}</h4>
+                        ${typeBadge}
+                    </div>
+                    <p class="text-xs text-outline font-medium">
+                        <i class="fas fa-map-marker-alt mr-1"></i>${j.location}
+                        &nbsp;·&nbsp;
+                        <i class="fas fa-money-bill-wave mr-1"></i>${j.pay}
+                    </p>
+                    ${j.description ? `<p class="text-sm text-gray-500 mt-2 line-clamp-2">${j.description}</p>` : ''}
+                </div>
+                <div class="flex flex-col gap-1.5 shrink-0">
+                    ${!isFilled ? `
+                    <button onclick="openEditModal(${j.id}, '${escapeAttr(j.title)}', '${escapeAttr(j.job_type)}', '${escapeAttr(j.location)}', '${escapeAttr(j.pay)}', '${escapeAttr(j.description)}')"
+                        class="flex items-center gap-1.5 text-xs bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white font-bold px-3 py-2 rounded-lg transition">
+                        <i class="fas fa-pen"></i> Edit
+                    </button>
+                    <button onclick="markJobFilled(${j.id})"
+                        class="flex items-center gap-1.5 text-xs bg-green-50 text-green-700 hover:bg-green-600 hover:text-white font-bold px-3 py-2 rounded-lg transition">
+                        <i class="fas fa-check-circle"></i> Filled
+                    </button>` : ''}
+                    <button onclick="deleteJob(${j.id})"
+                        class="flex items-center gap-1.5 text-xs bg-red-50 text-red-600 hover:bg-red-600 hover:text-white font-bold px-3 py-2 rounded-lg transition">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function openEditModal(id, title, type, location, pay, desc) {
+    document.getElementById('editJobId').value = id;
+    document.getElementById('editJobTitle').value = title;
+    document.getElementById('editJobType').value = type && type !== 'Filled' ? type : 'Full-time';
+    document.getElementById('editJobLocation').value = location;
+    document.getElementById('editJobPay').value = pay;
+    document.getElementById('editJobDesc').value = desc;
+    document.getElementById('editJobModal').style.display = 'flex';
+}
+
+function closeEditModal() {
+    document.getElementById('editJobModal').style.display = 'none';
+}
+
+async function saveEditJob() {
+    const id = document.getElementById('editJobId').value;
+    const data = {
+        title:       document.getElementById('editJobTitle').value,
+        type:        document.getElementById('editJobType').value,
+        location:    document.getElementById('editJobLocation').value,
+        pay:         document.getElementById('editJobPay').value,
+        description: document.getElementById('editJobDesc').value
+    };
+    const res = await fetch(`/api/jobs/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    if (res.ok) { closeEditModal(); loadJobs(); }
+    else showToast('Failed to update job.', 'error');
+}
+
+async function deleteJob(id) {
+    if (!confirm('Delete this job posting? This cannot be undone.')) return;
+    const res = await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
+    if (res.ok) loadJobs();
+    else showToast('Failed to delete job.', 'error');
+}
+
+async function markJobFilled(id) {
+    if (!confirm('Mark this position as filled?')) return;
+    const res = await fetch(`/api/jobs/${id}/filled`, { method: 'POST' });
+    if (res.ok) loadJobs();
+    else showToast('Failed to update job status.', 'error');
+}
+
+document.getElementById('adminPostJobForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = {
+        title:       document.getElementById('adminJobTitle').value,
+        type:        document.getElementById('adminJobType').value,
+        location:    document.getElementById('adminJobLocation').value,
+        pay:         document.getElementById('adminJobPay').value,
+        description: document.getElementById('adminJobDesc').value
+    };
+    const res = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    if (res.ok) {
+        showToast('Job posted successfully!', 'success');
+        this.reset();
+        loadJobs();
+    } else {
+        showToast('Failed to post job. Please try again.', 'error');
+    }
+});
+
+// ---- SEARCH & FILTER LISTENERS ----
+  </script>
+</body>
+</html>

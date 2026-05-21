@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>BuildForce | Admin Portal Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0B132B",      // deep dark blue
+                        "primary-container": "#1C2541",
+                        "secondary": "#F4D03F",    // vibrant yellow
+                        "secondary-dark": "#E5BE01",
+                        "background": "#F8FAFC",
+                        "surface": "#FFFFFF",
+                        "outline": "#94A3B8",
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        h1, h2, h3, .font-headline { font-family: 'Public Sans', sans-serif; }
+        
+        /* Custom focus ring for yellow accent */
+        .focus-ring-yellow:focus {
+            ring-color: #F4D03F;
+        }
+    </style>
+</head>
+<body class="text-[#0F172A] overflow-hidden">
+
+    <div class="min-h-screen flex w-full">
+        
+        <!-- Left Side Hero Section with Yellow Overlay -->
+        <div class="hidden lg:flex lg:w-1/2 relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=1200');">
+            <div class="absolute inset-0 bg-[#0B132B]/90 backdrop-blur-[2px]"></div>
+            
+            <div class="absolute inset-0 flex flex-col justify-between p-12 text-white z-10">
+                <div class="flex items-center gap-2">
+                    <div class="text-3xl font-black font-headline tracking-tight">
+                        <span class="text-[#F4D03F]">ConstructHire</span>
+                    </div>
+                    <div class="h-6 w-px bg-yellow-400/40 mx-2"></div>
+                    <div class="text-xs font-bold uppercase tracking-[0.2em] text-yellow-300/90">Admin Core</div>
+                </div>
+                
+                <div class="my-8">
+                    <div class="inline-block px-4 py-1.5 bg-[#F4D03F]/20 backdrop-blur-sm rounded-full text-[#F4D03F] text-sm font-bold mb-6 border border-[#F4D03F]/30">
+                        ⚡ Admin Portal Access
+                    </div>
+                    <h1 class="text-5xl lg:text-6xl font-black font-headline mb-6 leading-[1.15] tracking-tight">
+                        Construction<br>Intelligence<br><span class="text-[#F4D03F]">Command Center</span>
+                    </h1>
+                    <p class="text-base opacity-80 max-w-md leading-relaxed">
+                        Authorized personnel portal for project oversight, resource allocation, and worksite analytics. Secure access to ConstructHire infrastructure.
+                    </p>
+                </div>
+                
+                <div class="flex items-center gap-4 text-xs opacity-60 font-medium">
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex flex-col justify-center px-6 sm:px-12 md:px-16 xl:px-24 bg-[#F8FAFC] relative overflow-y-auto">
+ 
+            <div class="lg:hidden absolute top-6 left-6 z-20">
+                <a href="/" class="text-[#0B132B] font-bold text-sm flex items-center gap-1 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Home
+                </a>
+            </div>
+
+            <div class="max-w-md w-full mx-auto my-10">
+                
+                
+                <div class="mb-8 bg-[#FEF9E6] border-l-4 border-[#F4D03F] text-[#0B132B] px-5 py-3 rounded-xl flex items-start gap-3 text-sm shadow-sm">
+                    <span class="material-symbols-outlined text-[#F4D03F] mt-0.5">verified</span>
+                    <div>
+                        <span class="font-bold block tracking-wide uppercase text-xs mb-0.5 text-[#0B132B]">System Status: Operational</span>
+                        <span class="opacity-80 text-gray-700">Secure connection · All services online · Real-time sync active</span>
+                    </div>
+                </div>
+
+          
+                <div class="bg-white p-7 sm:p-10 rounded-3xl shadow-2xl border border-gray-100 relative transition-all">
+                    
+
+                    <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-[#0B132B] rounded-2xl flex items-center justify-center shadow-xl border-4 border-white rotate-45">
+                        <span class="material-symbols-outlined text-[#F4D03F] text-3xl -rotate-45">construction</span>
+                    </div>
+
+                    <div class="text-center mb-7 mt-4">
+                        <h2 class="text-2xl font-black font-headline text-[#0B132B] tracking-tight">Admin Access</h2>
+                        <div class="flex items-center justify-center gap-2 mt-1">
+                            <div class="h-0.5 w-6 bg-[#F4D03F] rounded-full"></div>
+                            <p class="text-sm font-semibold text-gray-500">Authorized Personnel</p>
+                            <div class="h-0.5 w-6 bg-[#F4D03F] rounded-full"></div>
+                        </div>
+                    </div>
+
+                  
+                    <div id="errorMessageContainer" class="hidden mb-5"></div>
+
+                    <form method="POST" action="/login" id="loginForm" class="space-y-5">
+                        
+                        
+                        <div>
+                            <label class="block text-[11px] font-black text-[#0B132B] tracking-wider uppercase mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">mail</span>
+                                Email Address
+                            </label>
+                            <input type="email" name="email" id="emailField" required 
+                                class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3.5 focus:ring-2 focus:ring-[#F4D03F] focus:border-transparent outline-none transition-all font-medium"
+                                placeholder="admin@ConstructHire.com">
+                        </div>
+
+                      
+                        <div>
+                            <label class="block text-[11px] font-black text-[#0B132B] tracking-wider uppercase mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[16px]">lock</span>
+                                Credential Key
+                            </label>
+                            <div class="relative">
+                                <input type="password" name="password" id="passwordField" required 
+                                    class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3.5 focus:ring-2 focus:ring-[#F4D03F] focus:border-transparent outline-none transition-all font-medium tracking-wider pr-12"
+                                    placeholder="••••••••">
+                                <button type="button" onclick="togglePassword()" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#F4D03F] transition-colors">
+                                    <span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+
+                       
+                        <div class="flex items-center justify-between pt-1">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" name="remember" id="remember" 
+                                    class="w-4 h-4 text-[#F4D03F] rounded border-gray-300 focus:ring-[#F4D03F] cursor-pointer">
+                                <label for="remember" class="text-xs font-medium text-gray-600 cursor-pointer select-none">Keep me signed in</label>
+                            </div>
+                        </div>
+
+                      
+                        <button type="submit" class="w-full bg-[#0B132B] text-white font-extrabold py-4 rounded-xl hover:bg-[#1C2541] transition-all shadow-lg hover:shadow-2xl mt-4 flex justify-center items-center gap-2 group">
+                            Access ConstructHire
+                            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition">arrow_forward</span>
+                        </button>
+                    </form>
+
+                   
+                    <div class="mt-8 pt-6 border-t border-gray-100">
+                        <div class="flex items-center justify-center gap-2 text-[10px] text-[#0B132B]/50 font-bold uppercase tracking-wider mb-5">
+                            <span class="material-symbols-outlined text-[14px]">shield_lock</span>
+                            Encrypted Session
+                        </div>
+                        <div class="flex justify-center">
+                            <button id="returnHomeBtn" class="group flex items-center gap-2 bg-transparent border-2 border-[#0B132B] text-[#0B132B] font-bold py-2.5 px-6 rounded-xl hover:bg-[#F4D03F] hover:border-[#F4D03F] hover:text-[#0B132B] transition-all duration-200 text-sm">
+                                <span class="material-symbols-outlined text-sm">home</span>
+                                Return to Homepage
+                                <span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+               
+                <div class="mt-10 text-center px-2">
+                    <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-wider font-semibold">
+                        ⚠️ Restricted System: Unauthorized access or misuse of ConstructHire admin infrastructure is prohibited. 
+                        All login attempts and administrative actions are logged and monitored under construction security protocols.
+                    </p>
+                    <p class="text-[9px] text-gray-300 mt-3">
+                        © 2026 ConstructHire Inc. • Construction Company of the Future • All rights reserved.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Password Visibility 
+        function togglePassword() {
+            const passwordField = document.getElementById("passwordField");
+            const eyeIcon = document.getElementById("eyeIcon");
+            
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.textContent = "visibility_off";
+            } else {
+                passwordField.type = "password";
+                eyeIcon.textContent = "visibility";
+            }
+        }
+
+        // ========== RETURN TO HOMEPAGE BUTTON ==========
+        const returnBtn = document.getElementById('returnHomeBtn');
+        if (returnBtn) {
+            returnBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+                    window.location.href = '/';
+                } else {
+                    // For local file demo or fallback show a confirmation + redirect simulation
+                    window.location.href = '/';
+                }
+                // Fallback if href doesn't change (safety)
+                setTimeout(() => {
+                    if (window.location.pathname === '/login' || window.location.pathname.includes('login')) {
+                        window.location.href = '/';
+                    }
+                }, 50);
+            });
+        }
+
+       
+        const loginForm = document.getElementById('loginForm');
+        const errorContainer = document.getElementById('errorMessageContainer');
+        
+        function showError(message) {
+            errorContainer.innerHTML = `
+                <div class="bg-red-50 border-l-4 border-[#b52619] text-red-700 p-3 rounded-lg text-sm font-medium mb-2 flex items-start gap-2 shadow-sm">
+                    <span class="material-symbols-outlined text-red-500 text-base">error</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            errorContainer.classList.remove('hidden');
+            setTimeout(() => {
+                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
+        }
+        
+        function hideError() {
+            errorContainer.classList.add('hidden');
+            errorContainer.innerHTML = '';
+        }
+        
+        
+        const emailInput = document.getElementById('emailField');
+        const passInput = document.getElementById('passwordField');
+        
+        if (emailInput && passInput) {
+            const clearError = () => hideError();
+            emailInput.addEventListener('input', clearError);
+            passInput.addEventListener('input', clearError);
+        }
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                const email = emailInput?.value.trim();
+                const password = passInput?.value;
+                
+                if (!email) {
+                    e.preventDefault();
+                    showError('Email address is required to access ConstructHire Admin Portal.');
+                    return false;
+                }
+                if (!password) {
+                    e.preventDefault();
+                    showError('Please enter your security key / password.');
+                    return false;
+                }
+                if (password.length < 4) {
+                    e.preventDefault();
+                    showError('Invalid credentials. Password must be at least 4 characters.');
+                    return false;
+                }
+                if (!email.includes('@') || !email.includes('.')) {
+                    e.preventDefault();
+                    showError('Please provide a valid email address (e.g., name@constructhire.com).');
+                    return false;
+                }
+                hideError();
+                return true;
+            });
+        }
+        
+
+        const card = document.querySelector('.bg-white.rounded-3xl');
+        if (card) {
+            card.style.transform = 'translateY(0px)';
+            card.style.transition = 'transform 0.2s ease';
+        }
+        
+ 
+        const submitBtn = document.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.addEventListener('mouseenter', () => {
+                submitBtn.style.transform = 'scale(1.01)';
+            });
+            submitBtn.addEventListener('mouseleave', () => {
+                submitBtn.style.transform = 'scale(1)';
+            });
+        }
+        
+      
+        const styleInject = document.createElement('style');
+        styleInject.textContent = `
+            .bg-\[\\#F8FAFC\] {
+                background-image: radial-gradient(circle at 10% 20%, rgba(244, 208, 63, 0.03) 1px, transparent 1px);
+                background-size: 24px 24px;
+            }
+            input:focus, button:focus {
+                outline: none;
+            }
+            .rounded-2xl, .rounded-3xl {
+                transition: box-shadow 0.2s;
+            }
+        `;
+        document.head.appendChild(styleInject);
+        
+     
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorParam = urlParams.get('error');
+        if (errorParam) {
+            showError(decodeURIComponent(errorParam));
+        }
+        
+     
+        console.log('ConstructHire Admin — Dark Blue + Yellow theme active | Return Home functionality ready');
+    </script>
+</body>
+</html>

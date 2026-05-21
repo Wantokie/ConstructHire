@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Construct Hire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    :root {
+      --navy:    #0d1f2d;
+      --navy2:   #142333;
+      --amber:   #f5a623;
+      --amber2:  #ffbd57;
+      --steel:   #1e3448;
+      --mist:    #e8f0f7;
+      --slate:   #6b8399;
+      --white:   #ffffff;
+      --card-bg: #ffffff;
+      --border:  #dce7f0;
+      --radius:  18px;
+      --shadow:  0 8px 32px rgba(13,31,45,0.10);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0f5fa;
+      color: var(--navy);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--mist); }
+    ::-webkit-scrollbar-thumb { background: var(--amber); border-radius: 99px; }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      border-bottom: 2px solid rgba(245,166,35,0.18);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: auto;
+      padding: 0 32px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-wordmark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--white);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .logo-wordmark span { color: var(--amber); }
+
+    .logo-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--amber);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: rgba(245,166,35,0.12);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(245,166,35,0.25);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-link {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--white);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn-primary {
+      background: var(--amber);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-primary:hover {
+      background: var(--amber2);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(245,166,35,0.35);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.18);
+      font-weight: 500;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      padding: 90px 32px 80px;
+    }
+
+    /* diagonal stripe texture */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -55deg,
+        rgba(245,166,35,0.025) 0px,
+        rgba(245,166,35,0.025) 1px,
+        transparent 1px,
+        transparent 28px
+      );
+      pointer-events: none;
+    }
+
+    /* amber blob glow */
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+      top: -150px;
+      right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1280px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .hero-kicker::before {
+      content: '';
+      width: 32px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.2rem, 7vw, 5.5rem);
+      color: var(--white);
+      letter-spacing: 3px;
+      line-height: 0.95;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--amber);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.62);
+      max-width: 520px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      background: var(--amber);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px 30px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .hero-btn:hover {
+      background: var(--amber2);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(245,166,35,0.4);
+    }
+
+
+
+    /* ─── JOBS SECTION ─── */
+    .jobs-section {
+      max-width: 1280px;
+      margin: auto;
+      padding: 64px 32px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .section-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.6rem;
+      letter-spacing: 2px;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .filter-group i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      color: var(--navy);
+      background: #f7fbff;
+      outline: none;
+      transition: all 0.2s;
+      appearance: none;
+    }
+
+    .filter-group input::placeholder { color: #9bb0c2; }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: var(--amber);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(245,166,35,0.12);
+    }
+
+    /* ─── JOB COUNT PILL ─── */
+    .job-count-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.82rem;
+      font-family: 'Space Mono', monospace;
+      padding: 7px 16px;
+      border-radius: 99px;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .job-count-pill .dot {
+      width: 7px;
+      height: 7px;
+      background: var(--amber);
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    /* ─── JOB CARDS ─── */
+    #jobListContainer {
+      display: grid;
+      gap: 20px;
+    }
+
+    .job-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+      box-shadow: var(--shadow);
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .job-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--amber), #ff8c42);
+      border-radius: 4px 0 0 4px;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .job-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(13,31,45,0.12);
+      border-color: rgba(245,166,35,0.3);
+    }
+
+    .job-card:hover::before { opacity: 1; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .job-title-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.65rem;
+      color: var(--navy);
+      letter-spacing: 1.5px;
+      line-height: 1.1;
+    }
+
+    .badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 13px;
+      border-radius: 6px;
+      border: 1.5px solid;
+      white-space: nowrap;
+    }
+
+    .badge-filled    { background: #e2e8f0; color: #64748b; border: 1px solid #cbd5e1; }
+    .badge-fulltime  { color: #1a7f5a; background: #edfaf4; border-color: #b2eacd; }
+    .badge-contract  { color: #7a4f00; background: #fff8e6; border-color: #ffd97a; }
+    .badge-parttime  { color: #1f4fcf; background: #eef3ff; border-color: #b8c9f8; }
+    .badge-default   { color: #2c5f7a; background: #eef2f5; border-color: #c8dae6; }
+
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.88rem;
+      color: var(--slate);
+    }
+
+    .meta-item i {
+      color: var(--amber);
+      font-size: 0.85rem;
+      width: 16px;
+    }
+
+    .job-desc {
+      font-size: 0.9rem;
+      color: #6b8399;
+      line-height: 1.65;
+      margin-bottom: 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pay-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .pay-badge i { color: var(--amber); font-size: 0.9rem; }
+
+    .apply-btn {
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 11px 26px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .apply-btn:hover {
+      background: var(--amber);
+      color: var(--navy);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(245,166,35,0.35);
+    }
+
+    .apply-btn i { font-size: 0.8rem; transition: transform 0.2s; }
+    .apply-btn:hover i { transform: translateX(3px); }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--slate);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--border);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .empty-state h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #9bb0c2;
+    }
+
+    /* ─── MODAL ─── */
+    .application-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,20,30,0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-content {
+      background: var(--white);
+      width: 100%;
+      max-width: 580px;
+      border-radius: 24px;
+      padding: 36px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 40px 80px rgba(10,20,30,0.3);
+      animation: modalIn 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .modal-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+
+    .modal-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 7px;
+      letter-spacing: 0.3px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      color: var(--navy);
+      background: #f7fbff;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--amber);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(245,166,35,0.12);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .file-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--slate);
+      font-size: 0.88rem;
+      background: #f7fbff;
+    }
+
+    .file-label:hover {
+      border-color: var(--amber);
+      background: #fffbf0;
+      color: var(--navy);
+    }
+
+    .file-label i { color: var(--amber); }
+
+    input[type="file"] { display: none; }
+
+    .modal-actions {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .submit-btn {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 15px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.22s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+    }
+
+    .submit-btn:hover {
+      background: var(--amber);
+      color: var(--navy);
+      box-shadow: 0 8px 24px rgba(245,166,35,0.35);
+    }
+
+    .close-btn {
+      background: transparent;
+      color: var(--slate);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      background: #fff0f0;
+      border-color: #f8b8b8;
+      color: #c0392b;
+    }
+
+    /* ─── ABOUT SECTION ─── */
+    .about-section {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      padding: 90px 32px;
+    }
+
+    .about-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -55deg,
+        rgba(245,166,35,0.025) 0px,
+        rgba(245,166,35,0.025) 1px,
+        transparent 1px,
+        transparent 28px
+      );
+      pointer-events: none;
+    }
+
+    .about-inner {
+      max-width: 1280px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .about-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 2px;
+      background: var(--amber);
+    }
+
+    .about-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      color: var(--white);
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .about-title em {
+      font-style: normal;
+      color: var(--amber);
+    }
+
+    .about-body {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .about-feat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.25s;
+    }
+
+    .about-feat:hover {
+      background: rgba(245,166,35,0.07);
+      border-color: rgba(245,166,35,0.2);
+    }
+
+    .about-feat-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(245,166,35,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .about-feat-icon i {
+      color: var(--amber);
+      font-size: 1rem;
+    }
+
+    .about-feat-title {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--white);
+      margin-bottom: 5px;
+    }
+
+    .about-feat-desc {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+    }
+
+    .about-divider {
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(245,166,35,0.3), transparent);
+      align-self: stretch;
+      display: none;
+    }
+
+    .about-values {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .value-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      transition: all 0.25s;
+    }
+
+    .value-item:hover {
+      background: rgba(245,166,35,0.06);
+      border-color: rgba(245,166,35,0.18);
+      transform: translateX(4px);
+    }
+
+    .value-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: rgba(245,166,35,0.25);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 48px;
+    }
+
+    .value-content h4 {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .value-content p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 860px) {
+      .about-inner { grid-template-columns: 1fr; gap: 48px; }
+      .about-features { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .about-features { grid-template-columns: 1fr; }
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.45);
+      text-align: left;
+      padding: 48px 32px 36px;
+      margin-top: 60px;
+      border-top: 2px solid rgba(245,166,35,0.15);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: auto;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 8px;
+    }
+
+    .footer-logo span { color: var(--amber); }
+
+    .footer-sub {
+      font-size: 0.82rem;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+
+    .footer-contact-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 10px;
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-contact-item:hover { color: var(--amber); }
+
+    .footer-contact-item i {
+      color: var(--amber);
+      width: 16px;
+      text-align: center;
+    }
+
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin: 28px 0 16px;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 860px) {
+      .hero h1 { font-size: 3rem; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner { padding: 0 18px; }
+      .hero { padding: 60px 18px; }
+      .jobs-section { padding: 48px 18px; }
+      .modal-content { padding: 24px 20px; }
+      .logo-tag { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-wordmark">Construct<span>Hire</span></div>
+    </a>
+    <nav>
+      <a class="nav-link active" href="#">Home</a>
+      <a class="nav-link" href="#jobs">Jobs</a>
+      <a class="nav-link" href="#about">About</a>
+      <a class="btn-ghost" href="/index">
+        <i class="fas fa-user-shield"></i> Admin
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-kicker">Hiring Now · Construction Industry</div>
+      <h1>Find Your Next<br><em>Build</em> Job</h1>
+      <p class="hero-sub">
+        Real opportunities for electricians, carpenters, welders, laborers, supervisors, and every skilled trade in between.
+      </p>
+      <div class="hero-actions">
+        <button class="hero-btn" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
+          <i class="fas fa-hard-hat"></i> Browse Jobs
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── JOBS ─── -->
+<section class="jobs-section" id="jobs">
+
+  <div class="section-head">
+    <div>
+      <div class="section-eyebrow">Open Positions</div>
+      <div class="section-title">Construction Jobs</div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="filter-group" style="flex:2;">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Job title, company, or keyword…">
+    </div>
+    <div class="filter-group">
+      <i class="fas fa-briefcase"></i>
+      <select id="typeFilter">
+        <option value="All">All Job Types</option>
+        <option value="Full-time">Full-time</option>
+        <option value="Contract">Contract</option>
+        <option value="Part-time">Part-time</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="job-count-pill">
+    <span class="dot"></span>
+    <span id="jobCount">0</span> positions available
+  </div>
+
+  <div id="jobListContainer"></div>
+
+</section>
+
+<!-- ─── APPLICATION MODAL ─── -->
+<div class="application-modal" id="applicationModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-eyebrow">Application Form</div>
+      <h2 id="modalJobTitle">Apply for Job</h2>
+    </div>
+
+    <form id="applicationForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="applicantName" placeholder="Juan Dela Cruz" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="applicantPhone" placeholder="09xxxxxxxxx" required inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        </div>
+        <div class="form-group full">
+          <label>Email Address</label>
+          <input type="email" id="applicantEmail" placeholder="you@email.com" required>
+        </div>
+        <div class="form-group full">
+          <label>Address</label>
+          <input type="text" id="applicantAddress" placeholder="Street, City, Province" required>
+        </div>
+        <div class="form-group full">
+          <label>Skills / Experience</label>
+          <textarea id="applicantSkills" placeholder="e.g., 5 years roofing, welding certification, forklift operator…"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Resume / Documents</label>
+          <label class="file-label" for="applicantDocuments">
+            <i class="fas fa-paperclip"></i>
+            <span id="fileLabel">Attach resume or supporting docs…</span>
+          </label>
+          <input type="file" id="applicantDocuments" multiple>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-paper-plane"></i> Submit Application
+        </button>
+        <button type="button" class="close-btn" id="closeModalBtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ─── ABOUT ─── -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div>
+      <div class="about-eyebrow">Who We Are</div>
+      <h2 class="about-title">Built for the<br><em>Builders</em></h2>
+      <p class="about-body">
+        Construct Hire is a dedicated job platform connecting skilled construction workers with employers across the country. We focus exclusively on the trades — no noise, no irrelevant listings, just real work for real builders.
+      </p>
+      <p class="about-body">
+        Whether you're a seasoned foreman or just starting out as a laborer, our platform makes it simple to discover opportunities that match your skills and get hired fast.
+      </p>
+      <div class="about-features">
+        <div class="about-feat">
+          <div class="about-feat-icon"><i class="fas fa-bolt"></i></div>
+          <div class="about-feat-title">Fast Applications</div>
+          <div class="about-feat-desc">Apply to any job in under 2 minutes with your profile.</div>
+        </div>
+        <div class="about-feat">
+          <div class="about-feat-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="about-feat-title">Verified Listings</div>
+          <div class="about-feat-desc">Every job posting is reviewed before going live.</div>
+        </div>
+        <div class="about-feat">
+          <div class="about-feat-icon"><i class="fas fa-hard-hat"></i></div>
+          <div class="about-feat-title">Trade-Focused</div>
+          <div class="about-feat-desc">Built specifically for construction and skilled trades.</div>
+        </div>
+        <div class="about-feat">
+          <div class="about-feat-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="about-feat-title">Local Opportunities</div>
+          <div class="about-feat-desc">Find jobs close to home across all regions.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-values">
+      <div class="value-item">
+        <div class="value-num">01</div>
+        <div class="value-content">
+          <h4>Our Mission</h4>
+          <p>To eliminate the gap between skilled workers and the employers who need them, making the hiring process as straightforward as the work itself.</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">02</div>
+        <div class="value-content">
+          <h4>Our Vision</h4>
+          <p>A construction industry where every qualified worker finds meaningful employment quickly and every project gets the skilled team it deserves.</p>
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">03</div>
+        <div class="value-content">
+          <h4>Our Values</h4>
+          <p>Honesty, hard work, and respect for the trades. We believe construction workers are the backbone of every community and deserve a platform that treats them that way.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Construct<span>Hire</span></div>
+    <div class="footer-sub">Construction Job Listings · All Rights Reserved</div>
+
+    <div class="footer-contact-title">Contact Us</div>
+    <div class="footer-contact">
+      <a href="https://www.facebook.com/ConstructHire" target="_blank" class="footer-contact-item">
+        <i class="fab fa-facebook"></i> Facebook Page &mdash; ConstructHire
+      </a>
+      <a href="mailto:constructhire@gmail.com" class="footer-contact-item">
+        <i class="fas fa-envelope"></i> constructhire@gmail.com
+      </a>
+    </div>
+
+    <hr class="footer-divider">
+    <div class="footer-copy">&copy; 2026 ConstructHire. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+let allJobs = [];
+
+function getBadgeClass(type) {
+  if (!type) return 'badge-default';
+  const t = type.toLowerCase();
+  if (t === 'filled')         return 'badge-filled';
+  if (t.includes('full'))     return 'badge-fulltime';
+  if (t.includes('contract')) return 'badge-contract';
+  if (t.includes('part'))     return 'badge-parttime';
+  return 'badge-default';
+}
+
+async function fetchJobs() {
+  try {
+    const res = await fetch('/api/jobs');
+    if (!res.ok) throw new Error('API error: ' + res.status);
+    const data = await res.json();
+    allJobs = Array.isArray(data) ? data : [];
+    renderJobs(allJobs);
+  } catch (err) {
+    console.error('fetchJobs failed:', err);
+    allJobs = [];
+    renderJobs([]);
+  }
+}
+
+function renderJobs(jobs) {
+  const container = document.getElementById('jobListContainer');
+  if (!container) return;
+
+  const count = jobs.length;
+  document.getElementById('jobCount').textContent = count;
+
+  if (count === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-hard-hat"></i>
+        <h3>No jobs found</h3>
+        <p>Try adjusting your search or filters.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = jobs.map((job, i) => `
+    <div class="job-card" style="animation-delay:${i * 0.06}s">
+      <div class="card-top">
+        <div class="job-title-text">${job.title}</div>
+        <span class="badge ${getBadgeClass(job.job_type)}">${job.job_type || 'Full-time'}</span>
+      </div>
+      <div class="job-meta">
+        <span class="meta-item"><i class="fas fa-building"></i>${job.company}</span>
+        <span class="meta-item"><i class="fas fa-map-marker-alt"></i>${job.location}</span>
+      </div>
+      ${job.description ? `<p class="job-desc">${job.description}</p>` : ''}
+      <div class="card-footer">
+        <div class="pay-badge"><i class="fas fa-money-bill-wave"></i>${job.pay}</div>
+        ${job.job_type === 'Filled'
+          ? `<button class="apply-btn" disabled style="opacity:0.45;cursor:not-allowed;background:#aaa;">
+               <i class="fas fa-ban"></i> Position Filled
+             </button>`
+          : `<button class="apply-btn" onclick="openApplyModal(${job.id}, '${job.title.replace(/'/g, "\\'")}')">
+               Apply Now <i class="fas fa-arrow-right"></i>
+             </button>`
+        }
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterJobs() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const type   = document.getElementById('typeFilter').value;
+  const filtered = allJobs.filter(job => {
+    const matchSearch = [job.title, job.company, job.description]
+      .filter(Boolean).some(f => f.toLowerCase().includes(search));
+    const matchType = type === 'All' || job.job_type === type;
+    return matchSearch && matchType;
+  });
+  renderJobs(filtered);
+}
+
+let selectedJobId = null;
+
+function openApplyModal(id, title) {
+  selectedJobId = id;
+  document.getElementById('modalJobTitle').textContent = title;
+  document.getElementById('applicationModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('applicationModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('applicantDocuments').addEventListener('change', function() {
+  const label = document.getElementById('fileLabel');
+  label.textContent = this.files.length
+    ? [...this.files].map(f => f.name).join(', ')
+    : 'Attach resume or supporting docs…';
+});
+
+document.getElementById('applicationForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('.submit-btn');
+
+  // --- Email validation: only @gmail.com and @yahoo.com ---
+  const emailVal = document.getElementById('applicantEmail').value.trim();
+  if (!/^[^\s@]+@(gmail|yahoo)\.com$/i.test(emailVal)) {
+    alert('Please use a valid Gmail (@gmail.com) or Yahoo (@yahoo.com) email address.');
+    return;
+  }
+
+  // --- Phone validation: numbers only ---
+  const phoneVal = document.getElementById("applicantPhone").value.trim();
+  if (!/^[0-9]+$/.test(phoneVal)) {
+    alert("Contact number must contain numbers only. No letters or special characters.");
+    return;
+  }
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+
+  const formData = new FormData();
+  formData.append('job_id',     selectedJobId);
+  formData.append('name',       document.getElementById('applicantName').value);
+  formData.append('email',      document.getElementById('applicantEmail').value);
+  formData.append('phone',      document.getElementById('applicantPhone').value);
+  formData.append('address',    document.getElementById('applicantAddress').value);
+  formData.append('experience', document.getElementById('applicantSkills').value);
+  const file = document.getElementById('applicantDocuments').files[0];
+  if (file) formData.append('resume', file);
+
+  try {
+    const res = await fetch('/api/applications', { method: 'POST', body: formData });
+    if (res.ok) {
+      alert('Application sent! We will contact you soon.');
+      closeModal();
+      this.reset();
+      document.getElementById('fileLabel').textContent = 'Attach resume or supporting docs…';
+    } else {
+      const errData = await res.json().catch(() => ({}));
+      alert(errData.error || 'Something went wrong. Please try again.');
+    }
+  } catch {
+    alert('Network error. Please try again.');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchJobs();
+  document.getElementById('searchInput').addEventListener('input',  filterJobs);
+  document.getElementById('typeFilter').addEventListener('change', filterJobs);
+  document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+  // close on backdrop click
+  document.getElementById('applicationModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+});
+</script>
+</body>
+</html>
