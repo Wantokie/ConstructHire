@@ -1,2 +1,7 @@
-# ConstructHire
-A Construction job website for the builders
+Flask
+Flask-SQLAlchemy
+Flask-Mail
+Werkzeug
+openpyxl
+PyMySQL
+gunicorn
