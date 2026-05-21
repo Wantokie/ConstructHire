@@ -10,15 +10,15 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 app = Flask(__name__)
-app.secret_key = 'jobapp_secret_key'
+app.secret_key = os.environ.get('SECRET_KEY', 'jobapp_secret_key')
 
 # --- CONFIGURATION ---
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'razonprinceeinstein@gmail.com'
-app.config['MAIL_PASSWORD'] = 'tghtskancatrgntu'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost:3307/admin_system'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
@@ -121,11 +121,11 @@ def handle_apps():
         if not re.match(r'^[^\s@]+@(gmail|yahoo)\.com$', email, re.IGNORECASE):
             return jsonify({"error": "Only @gmail.com or @yahoo.com emails are accepted."}), 400
 
-
         # --- Phone: numbers only ---
         phone = f.get("phone", "")
         if not re.match(r"^[0-9]+$", phone):
             return jsonify({"error": "Contact number must contain numbers only."}), 400
+
         # --- Block applications for Filled jobs ---
         job_id = f.get('job_id')
         job = Job.query.get(job_id)
@@ -212,7 +212,7 @@ def hire_app(id):
             f"  Job Title : {job_title}\n"
             f"  Location  : {job_location}\n"
             f"  Pay       : {job_pay}\n\n"
-            f"Please expect a follow-up communication from our HR team with onboarding details, your start date, and any documents you may need to prepare."
+            f"Please expect a follow-up communication from our HR team with onboarding details, "
             f"your start date, and any documents you may need to prepare.\n\n"
             f"Welcome to the ConstructHire!\n\n"
             f"Warm regards,\nConstructHire HR department"
@@ -308,7 +308,7 @@ def export_approved():
             cell.font = Font(name='Arial', size=10)
             cell.alignment = center if col == 1 else left
 
-    # Column widths (use get_column_letter to avoid MergedCell errors)
+    # Column widths
     col_widths = [5, 22, 28, 16, 20, 20, 18, 14, 12, 18]
     for col, width in enumerate(col_widths, 1):
         ws.column_dimensions[get_column_letter(col)].width = width
@@ -363,6 +363,10 @@ def mark_job_filled(id):
     job.job_type = 'Filled'
     db.session.commit()
     return jsonify({"message": "Job Marked as Filled"})
+
+# --- AUTO CREATE TABLES ---
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)
