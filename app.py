@@ -2,31 +2,44 @@ import io
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_file
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'jobapp_secret_key')
 
 # --- CONFIGURATION ---
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-mail = Mail(app)
+MAIL_SENDER = os.environ.get('MAIL_USERNAME', 'razonprinceeinstein@gmail.com')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+
 db = SQLAlchemy(app)
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+# --- SENDGRID HELPER ---
+def send_email(to_email, subject, body):
+    try:
+        message = Mail(
+            from_email=MAIL_SENDER,
+            to_emails=to_email,
+            subject=subject,
+            plain_text_content=body
+        )
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        sg.send(message)
+        print(f"Email sent to {to_email}")
+    except Exception as e:
+        print(f"SendGrid error: {e}")
 
 # --- MODELS ---
 class Job(db.Model):
@@ -163,23 +176,19 @@ def approve_app(id):
     app_obj.status = 'Completed'
     db.session.commit()
 
-    try:
-        msg = Message(
-            "Application Is On Process — ConstructHire",
-            sender=app.config['MAIL_USERNAME'],
-            recipients=[app_obj.applicant_email]
-        )
-        msg.body = (
+    send_email(
+        to_email=app_obj.applicant_email,
+        subject="Application Is On Process — ConstructHire",
+        body=(
             f"Hi {app_obj.applicant_name},\n\n"
             f"Great news! Your application for the {job_title} position has been approved.\n\n"
-            f"Prepare on your interview please bring the required documents including the Resume,Barangay & Police Clearance and Valid Id\n\n"
-            f"Come to our office at 9:00 am Located at City Of San Fernando Pampanga ConstructHire Main Office. \n"
+            f"Prepare on your interview please bring the required documents including the Resume, "
+            f"Barangay & Police Clearance and Valid Id\n\n"
+            f"Come to our office at 9:00 am Located at City Of San Fernando Pampanga ConstructHire Main Office.\n"
             f"Good Luck on the interview!\n\n"
             f"Best regards,\nConstructHire HR department"
         )
-        mail.send(msg)
-    except Exception as e:
-        print(f"Mail error: {e}")
+    )
 
     return jsonify({"success": True})
 
@@ -199,15 +208,12 @@ def hire_app(id):
     app_obj.hired_at = datetime.utcnow()
     db.session.commit()
 
-    try:
-        msg = Message(
-            "Congratulations! You're Hired — ConstructHire",
-            sender=app.config['MAIL_USERNAME'],
-            recipients=[app_obj.applicant_email]
-        )
-        msg.body = (
+    send_email(
+        to_email=app_obj.applicant_email,
+        subject="Congratulations! You're Hired — ConstructHire",
+        body=(
             f"Dear {app_obj.applicant_name},\n\n"
-            f"We are thrilled to officially offer you the position of {job_title} at ConstructHire !\n\n"
+            f"We are thrilled to officially offer you the position of {job_title} at ConstructHire!\n\n"
             f"Position Details:\n"
             f"  Job Title : {job_title}\n"
             f"  Location  : {job_location}\n"
@@ -217,9 +223,7 @@ def hire_app(id):
             f"Welcome to the ConstructHire!\n\n"
             f"Warm regards,\nConstructHire HR department"
         )
-        mail.send(msg)
-    except Exception as e:
-        print(f"Mail error (hire notification): {e}")
+    )
 
     return jsonify({"success": True})
 
