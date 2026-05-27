@@ -229,9 +229,26 @@ def hire_app(id):
 
 @app.route('/api/applications/reject/<int:id>', methods=['POST'])
 def reject_app(id):
-    app_obj = Application.query.get_or_404(id)
+    result = db.session.query(Application, Job.title).join(Job, Application.job_id == Job.id).filter(Application.id == id).first_or_404()
+    app_obj, job_title = result
     app_obj.status = 'Rejected'
     db.session.commit()
+
+    send_email(
+        to_email=app_obj.applicant_email,
+        subject="Application Update — ConstructHire",
+        body=(
+            f"Hi {app_obj.applicant_name},\n\n"
+            f"Thank you for your interest in the {job_title} position at ConstructHire.\n\n"
+            f"After careful review, we regret to inform you that your application has not been selected "
+            f"at this time.\n\n"
+            f"We encourage you to keep an eye on our job listings for future opportunities that may be "
+            f"a great fit for your skills and experience.\n\n"
+            f"We wish you all the best in your job search.\n\n"
+            f"Best regards,\nConstructHire HR Department"
+        )
+    )
+
     return jsonify({"success": True})
 
 # --- EXCEL EXPORT ---
