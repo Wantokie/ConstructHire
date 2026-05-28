@@ -139,7 +139,67 @@
           <div class="lg:col-span-1">
             <form id="adminPostJobForm" class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 space-y-5">
               <h3 class="font-bold text-lg mb-2">Post New Job</h3>
-              <input type="text" id="adminJobTitle" placeholder="Job Title (e.g. ENGINEER)" class="w-full rounded-xl border-gray-200 py-3" required>
+              <select id="adminJobTitle" class="w-full rounded-xl border-gray-200 py-3" required>
+                <option value="" disabled selected>Select Job Title</option>
+                <optgroup label="Engineering & Technical">
+                  <option>Civil Engineer</option>
+                  <option>Structural Engineer</option>
+                  <option>Mechanical Engineer</option>
+                  <option>Electrical Engineer</option>
+                  <option>Geotechnical Engineer</option>
+                  <option>Environmental Engineer</option>
+                  <option>Construction Engineer</option>
+                  <option>Site Engineer</option>
+                  <option>Quantity Surveyor</option>
+                  <option>Cost Estimator</option>
+                </optgroup>
+                <optgroup label="Management & Supervision">
+                  <option>Project Manager</option>
+                  <option>Construction Manager</option>
+                  <option>Site Supervisor</option>
+                  <option>Foreman</option>
+                  <option>Safety Officer</option>
+                  <option>Quality Control Inspector</option>
+                  <option>Project Coordinator</option>
+                  <option>Contracts Manager</option>
+                </optgroup>
+                <optgroup label="Skilled Trades">
+                  <option>Carpenter</option>
+                  <option>Mason / Bricklayer</option>
+                  <option>Welder</option>
+                  <option>Pipefitter / Plumber</option>
+                  <option>Electrician</option>
+                  <option>Steel Fixer / Rebar Worker</option>
+                  <option>Painter / Finisher</option>
+                  <option>Tile Setter</option>
+                  <option>Glazier</option>
+                  <option>Plasterer</option>
+                  <option>Roofing Specialist</option>
+                  <option>HVAC Technician</option>
+                </optgroup>
+                <optgroup label="Heavy Equipment & Operations">
+                  <option>Equipment Operator</option>
+                  <option>Crane Operator</option>
+                  <option>Excavator Operator</option>
+                  <option>Bulldozer Operator</option>
+                  <option>Dump Truck Driver</option>
+                  <option>Concrete Pump Operator</option>
+                </optgroup>
+                <optgroup label="General Labor">
+                  <option>General Construction Laborer</option>
+                  <option>Scaffolding Worker</option>
+                  <option>Demolition Worker</option>
+                  <option>Concrete Worker</option>
+                  <option>Waterproofing Worker</option>
+                  <option>Landscape / Site Cleanup Worker</option>
+                </optgroup>
+                <optgroup label="Architecture & Design">
+                  <option>Architect</option>
+                  <option>Draftsman / CAD Technician</option>
+                  <option>Interior Designer</option>
+                  <option>BIM Specialist</option>
+                </optgroup>
+              </select>
               <select id="adminJobType" class="w-full rounded-xl border-gray-200 py-3" required>
                 <option value="Full-time">Full-time</option>
                 <option value="Part-time">Part-time</option>
@@ -167,7 +227,67 @@
             <button onclick="closeEditModal()" class="text-outline hover:text-secondary transition text-2xl font-bold leading-none">&times;</button>
           </div>
           <input type="hidden" id="editJobId">
-          <input type="text" id="editJobTitle" placeholder="Job Title" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
+          <select id="editJobTitle" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
+            <option value="" disabled>Select Job Title</option>
+            <optgroup label="Engineering & Technical">
+              <option>Civil Engineer</option>
+              <option>Structural Engineer</option>
+              <option>Mechanical Engineer</option>
+              <option>Electrical Engineer</option>
+              <option>Geotechnical Engineer</option>
+              <option>Environmental Engineer</option>
+              <option>Construction Engineer</option>
+              <option>Site Engineer</option>
+              <option>Quantity Surveyor</option>
+              <option>Cost Estimator</option>
+            </optgroup>
+            <optgroup label="Management & Supervision">
+              <option>Project Manager</option>
+              <option>Construction Manager</option>
+              <option>Site Supervisor</option>
+              <option>Foreman</option>
+              <option>Safety Officer</option>
+              <option>Quality Control Inspector</option>
+              <option>Project Coordinator</option>
+              <option>Contracts Manager</option>
+            </optgroup>
+            <optgroup label="Skilled Trades">
+              <option>Carpenter</option>
+              <option>Mason / Bricklayer</option>
+              <option>Welder</option>
+              <option>Pipefitter / Plumber</option>
+              <option>Electrician</option>
+              <option>Steel Fixer / Rebar Worker</option>
+              <option>Painter / Finisher</option>
+              <option>Tile Setter</option>
+              <option>Glazier</option>
+              <option>Plasterer</option>
+              <option>Roofing Specialist</option>
+              <option>HVAC Technician</option>
+            </optgroup>
+            <optgroup label="Heavy Equipment & Operations">
+              <option>Equipment Operator</option>
+              <option>Crane Operator</option>
+              <option>Excavator Operator</option>
+              <option>Bulldozer Operator</option>
+              <option>Dump Truck Driver</option>
+              <option>Concrete Pump Operator</option>
+            </optgroup>
+            <optgroup label="General Labor">
+              <option>General Construction Laborer</option>
+              <option>Scaffolding Worker</option>
+              <option>Demolition Worker</option>
+              <option>Concrete Worker</option>
+              <option>Waterproofing Worker</option>
+              <option>Landscape / Site Cleanup Worker</option>
+            </optgroup>
+            <optgroup label="Architecture & Design">
+              <option>Architect</option>
+              <option>Draftsman / CAD Technician</option>
+              <option>Interior Designer</option>
+              <option>BIM Specialist</option>
+            </optgroup>
+          </select>
           <select id="editJobType" class="w-full rounded-xl border border-gray-200 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-secondary/30">
             <option value="Full-time">Full-time</option>
             <option value="Part-time">Part-time</option>
@@ -431,7 +551,15 @@ async function loadJobs() {
 
 function openEditModal(id, title, type, location, pay, desc) {
     document.getElementById('editJobId').value = id;
-    document.getElementById('editJobTitle').value = title;
+    const titleSelect = document.getElementById('editJobTitle');
+    titleSelect.value = title;
+    // If the saved title isn't in the list, add it temporarily so it still shows
+    if (titleSelect.value !== title) {
+        const opt = document.createElement('option');
+        opt.value = title; opt.textContent = title;
+        titleSelect.prepend(opt);
+        titleSelect.value = title;
+    }
     document.getElementById('editJobType').value = type && type !== 'Filled' ? type : 'Full-time';
     document.getElementById('editJobLocation').value = location;
     document.getElementById('editJobPay').value = pay;
